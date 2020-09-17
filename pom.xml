@@ -38,7 +38,7 @@
         <liberty.env.DEFAULT_HTTPS_PORT>9443</liberty.env.DEFAULT_HTTPS_PORT -->
         <liberty.defaultVar.default.http.port>9080</liberty.defaultVar.default.http.port>
         <liberty.defaultVar.default.https.port>9443</liberty.defaultVar.default.https.port>
-        <version.liberty-maven-plugin>3.2</version.liberty-maven-plugin>
+        <version.liberty-maven-plugin>3.3-M3</version.liberty-maven-plugin>
     </properties>
 
     <groupId>dev.odo.starter.java-openliberty</groupId>
