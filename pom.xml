@@ -20,25 +20,19 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-<!-- not using the parent pom for now
-    <parent>
-        <groupId>dev.appsody</groupId>
-        <artifactId>java-openliberty</artifactId>
-        <version>[0.1, 0.3)</version>
-        <relativePath/>
-    </parent>
--->
+
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <version.maven-war-plugin>3.2.2</version.maven-war-plugin>
         <version.maven-surefire-plugin>3.0.0-M1</version.maven-surefire-plugin>
         <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
-        <!-- liberty.env.DEFAULT_HTTP_PORT>9080</liberty.env.DEFAULT_HTTP_PORT>
-        <liberty.env.DEFAULT_HTTPS_PORT>9443</liberty.env.DEFAULT_HTTPS_PORT -->
+        <version.liberty-maven-plugin>3.3-M3</version.liberty-maven-plugin>
+
         <liberty.defaultVar.default.http.port>9080</liberty.defaultVar.default.http.port>
         <liberty.defaultVar.default.https.port>9443</liberty.defaultVar.default.https.port>
-        <version.liberty-maven-plugin>3.3-M3</version.liberty-maven-plugin>
+        <!-- Workaround for https://github.com/OpenLiberty/ci.maven/issues/936 -->
+        <liberty.env.lmp-936>foo</liberty.env.lmp-936>
     </properties>
 
     <groupId>dev.odo.starter.java-openliberty</groupId>
