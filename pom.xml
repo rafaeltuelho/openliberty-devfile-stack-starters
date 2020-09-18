@@ -32,7 +32,7 @@
         <liberty.defaultVar.default.http.port>9080</liberty.defaultVar.default.http.port>
         <liberty.defaultVar.default.https.port>9443</liberty.defaultVar.default.https.port>
         <!-- Workaround for https://github.com/OpenLiberty/ci.maven/issues/936 -->
-        <liberty.env.lmp-936>foo</liberty.env.lmp-936>
+        <liberty.env.lmp936>foo</liberty.env.lmp936>
     </properties>
 
     <groupId>dev.odo.starter.java-openliberty</groupId>
