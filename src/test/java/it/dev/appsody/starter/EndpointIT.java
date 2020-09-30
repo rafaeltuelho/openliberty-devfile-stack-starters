@@ -12,39 +12,44 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*******************************************************************************/
+ *******************************************************************************/
 package it.dev.appsody.starter;
 
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
+import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
 
 import org.junit.jupiter.api.Test;
 import org.microshed.testing.jaxrs.RESTClient;
 import org.microshed.testing.jupiter.MicroShedTest;
 import org.microshed.testing.testcontainers.ApplicationContainer;
 import org.testcontainers.junit.jupiter.Container;
-import dev.appsody.starter.StarterResource;
+
+import dev.odo.starter.StarterApplication;
+import io.restassured.http.ContentType;
 
 @MicroShedTest
-public class JaxrsTestit {
-	
+public class EndpointIT {
+
 	@Container
-    public static ApplicationContainer app = new ApplicationContainer()
-                    .withAppContextRoot("/")
-                    .withReadinessPath("/health/ready")
-                    .withEnv("DEFAULT_HTTP_PORT", "9080")
-	                .withEnv("DEFAULT_HTTPS_PORT", "9443");
-                    
-	
+	public static ApplicationContainer app = new ApplicationContainer()
+	.withAppContextRoot("/")
+	.withReadinessPath("/health/ready")
+	.withEnv("DEFAULT_HTTP_PORT", "9080")
+	.withEnv("DEFAULT_HTTPS_PORT", "9443");
+
+
 	@RESTClient 
-	public static StarterResource appService;
-	
-	
+	public static StarterApplication appService;
+
 	@Test
-	public void testAppResponse() {
-		   assertEquals("Hello! Welcome to Openliberty", appService.getRequest());
+	public void testAssured() {
+		given()
+		.when()
+		.get("/")
+		.then()
+		.statusCode(200)
+		.contentType(ContentType.HTML);
 	}
-	               
+
 }
