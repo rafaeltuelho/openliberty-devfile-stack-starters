@@ -13,20 +13,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  *******************************************************************************/
-package it.dev.appsody.starter;
+package dev.odo.starter.it;
 
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
+import static io.restassured.RestAssured.*;
 
 import org.junit.jupiter.api.Test;
-import org.microshed.testing.jaxrs.RESTClient;
 import org.microshed.testing.jupiter.MicroShedTest;
 import org.microshed.testing.testcontainers.ApplicationContainer;
 import org.testcontainers.junit.jupiter.Container;
 
-import dev.odo.starter.StarterApplication;
 import io.restassured.http.ContentType;
+import static org.hamcrest.Matchers.*;
 
 @MicroShedTest
 public class EndpointIT {
@@ -38,18 +36,16 @@ public class EndpointIT {
 	.withEnv("DEFAULT_HTTP_PORT", "9080")
 	.withEnv("DEFAULT_HTTPS_PORT", "9443");
 
-
-	@RESTClient 
-	public static StarterApplication appService;
-
+	/**
+	 * Retrieve Open Liberty welcome page.
+	 */
 	@Test
-	public void testAssured() {
-		given()
-		.when()
-		.get("/")
-		.then()
+	public void testReassured() {
+		expect()
+		.body(containsString("<h2>Open Liberty</h2>"))
 		.statusCode(200)
-		.contentType(ContentType.HTML);
+		.contentType(ContentType.HTML)
+		.when().get("/");
 	}
 
 }
