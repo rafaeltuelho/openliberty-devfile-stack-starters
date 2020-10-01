@@ -35,14 +35,14 @@ public class EndpointIT {
 	.withReadinessPath("/health/ready");
 
 	/**
-	 * Retrieve Open Liberty welcome page.
+	 * Ping readiness health check.  See samples for more detail.
 	 */
 	@Test
 	public void testReassured() {
 		expect()
 		.statusCode(200)
-		.contentType(ContentType.HTML)
-		.when().get("/");
+		.contentType(ContentType.JSON)
+		.when().get("/health/ready");
 	}
 
 }
