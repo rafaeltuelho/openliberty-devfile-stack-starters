@@ -32,9 +32,9 @@ public class EndpointIT {
 	@Container
 	public static ApplicationContainer app = new ApplicationContainer()
 	.withAppContextRoot("/")
-	.withReadinessPath("/health/ready")
-	.withEnv("DEFAULT_HTTP_PORT", "9080")
-	.withEnv("DEFAULT_HTTPS_PORT", "9443");
+	.withReadinessPath("/health/ready");
+//	.withEnv("DEFAULT_HTTP_PORT", "9080")
+//	.withEnv("DEFAULT_HTTPS_PORT", "9443");
 
 	/**
 	 * Retrieve Open Liberty welcome page.
