@@ -17,16 +17,9 @@ limitations under the License.
 package dev.odo.starter;
 
 import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.core.Application;
 
-@ApplicationPath("/starter")
+@ApplicationPath("/api")
 public class StarterApplication extends Application {
-	
-	@GET
-	public void ping() {
-		return;
-	}
 
 }
