@@ -1,6 +1,21 @@
-/.apt_generated/
-/.apt_generated_tests/
+# Maven
 /target/
+
+# Eclipse 
+.project
+.factorypath
+.settings/
+.metadata
+/.apt_generated/
+/bin/
+/.apt_generated_tests/
+
+# Odo
 .odo/
+## Looks like dups but will prevent odo from re-adding
 .odo/env
 .odo/odo-file-index.json
+.odo\env
+.odo\odo-file-index.json
+
+
