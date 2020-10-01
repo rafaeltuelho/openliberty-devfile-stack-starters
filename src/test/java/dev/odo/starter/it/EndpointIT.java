@@ -33,8 +33,6 @@ public class EndpointIT {
 	public static ApplicationContainer app = new ApplicationContainer()
 	.withAppContextRoot("/")
 	.withReadinessPath("/health/ready");
-//	.withEnv("DEFAULT_HTTP_PORT", "9080")
-//	.withEnv("DEFAULT_HTTPS_PORT", "9443");
 
 	/**
 	 * Retrieve Open Liberty welcome page.
@@ -42,7 +40,6 @@ public class EndpointIT {
 	@Test
 	public void testReassured() {
 		expect()
-		.body(containsString("<h2>Open Liberty</h2>"))
 		.statusCode(200)
 		.contentType(ContentType.HTML)
 		.when().get("/");
