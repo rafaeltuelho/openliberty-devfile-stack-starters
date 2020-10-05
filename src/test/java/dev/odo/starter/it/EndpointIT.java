@@ -12,39 +12,37 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*******************************************************************************/
-package it.dev.appsody.starter;
+ *******************************************************************************/
+package dev.odo.starter.it;
 
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
+import static io.restassured.RestAssured.*;
 
 import org.junit.jupiter.api.Test;
-import org.microshed.testing.jaxrs.RESTClient;
 import org.microshed.testing.jupiter.MicroShedTest;
 import org.microshed.testing.testcontainers.ApplicationContainer;
 import org.testcontainers.junit.jupiter.Container;
-import dev.appsody.starter.StarterResource;
+
+import io.restassured.http.ContentType;
+import static org.hamcrest.Matchers.*;
 
 @MicroShedTest
-public class JaxrsTestit {
-	
+public class EndpointIT {
+
 	@Container
-    public static ApplicationContainer app = new ApplicationContainer()
-                    .withAppContextRoot("/")
-                    .withReadinessPath("/health/ready")
-                    .withEnv("DEFAULT_HTTP_PORT", "9080")
-	                .withEnv("DEFAULT_HTTPS_PORT", "9443");
-                    
-	
-	@RESTClient 
-	public static StarterResource appService;
-	
-	
+	public static ApplicationContainer app = new ApplicationContainer()
+	.withAppContextRoot("/")
+	.withReadinessPath("/health/ready");
+
+	/**
+	 * Ping readiness health check.  See samples for more detail.
+	 */
 	@Test
-	public void testAppResponse() {
-		   assertEquals("Hello! Welcome to Openliberty", appService.getRequest());
+	public void testReassured() {
+		expect()
+		.statusCode(200)
+		.contentType(ContentType.JSON)
+		.when().get("/health/ready");
 	}
-	               
+
 }
