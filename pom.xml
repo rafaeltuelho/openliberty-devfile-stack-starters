@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <io.openliberty.starter.tag>default-0.1.0</io.openliberty.starter.tag>
+        <io.openliberty.starter.tag>default-0.2.0</io.openliberty.starter.tag>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <version.maven-war-plugin>3.2.2</version.maven-war-plugin>
