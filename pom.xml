@@ -20,25 +20,22 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <properties>
-        <io.openliberty.starter.tag>default-0.2.1</io.openliberty.starter.tag>
-        <maven.compiler.target>11</maven.compiler.target>
-        <maven.compiler.source>11</maven.compiler.source>
-        <version.maven-war-plugin>3.2.2</version.maven-war-plugin>
-        <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
-        <version.maven-surefire-plugin>3.0.0-M1</version.maven-surefire-plugin>
-        <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
-        <version.liberty-maven-plugin>3.3-M3</version.liberty-maven-plugin>
-
-        <!-- Workaround for https://github.com/OpenLiberty/ci.maven/issues/936 -->
-        <liberty.env.lmp936>foo</liberty.env.lmp936>
-        <liberty.bootstrap.project.name>${project.artifactId}</liberty.bootstrap.project.name>
-    </properties>
-
     <groupId>dev.odo.starter.java-openliberty</groupId>
     <artifactId>starter-default</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+
+    <properties>
+        <io.openliberty.starter.tag>default-0.2.1</io.openliberty.starter.tag>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <version.maven-war-plugin>3.3.1</version.maven-war-plugin>
+        <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
+        <version.maven-surefire-plugin>3.0.0-M1</version.maven-surefire-plugin>
+        <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
+        <version.liberty-maven-plugin>3.3-M4</version.liberty-maven-plugin>
+        <liberty.bootstrap.project.name>${project.artifactId}</liberty.bootstrap.project.name>
+    </properties>
 
     <dependencies>
         <!-- Aggregate APIs -->
@@ -99,9 +96,6 @@
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>${version.liberty-maven-plugin}</version>
                 <configuration>
-                    <bootstrapProperties>
-                        <project.name>${project.artifactId}</project.name>
-                    </bootstrapProperties>
                     <!-- Needed to merge with generated keystore password -->
                     <mergeServerEnv>true</mergeServerEnv>
                     <!-- Extra time within container -->
