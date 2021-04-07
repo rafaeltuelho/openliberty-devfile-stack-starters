@@ -3,6 +3,7 @@
 
 # Eclipse 
 .project
+.classpath
 .factorypath
 .settings/
 .metadata
