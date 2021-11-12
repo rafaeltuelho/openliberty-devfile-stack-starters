@@ -31,7 +31,7 @@ targetCompatibility = 11
 compileJava.options.encoding = 'UTF-8'
 
 dependencies {
-    providedCompile 'org.eclipse.microprofile:microprofile:4.0.1'   
+    providedCompile 'org.eclipse.microprofile:microprofile:4.1'   
     providedCompile 'jakarta.platform:jakarta.jakartaee-api:8.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'org.microshed:microshed-testing-liberty:0.9'
@@ -44,7 +44,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'io.openliberty.tools:liberty-gradle-plugin:3.2'
+        classpath 'io.openliberty.tools:liberty-gradle-plugin:3.3'
     }
 }
 
