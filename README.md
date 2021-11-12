@@ -14,9 +14,9 @@
 
 [![License](https://img.shields.io/badge/License-ASL%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
-# application-stack-starters
-Starters for the java-openliberty application-stack.
+# devfile-stack-starters
+Starters for the java-openliberty devfile-stack.
 
-See: https://github.com/OpenLiberty/application-stack/blob/master/README.md for getting started info
+See: https://github.com/OpenLiberty/devfile-stack/blob/master/README.md for getting started info
 
 
