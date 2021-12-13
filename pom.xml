@@ -34,7 +34,7 @@
         <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
         <version.maven-surefire-plugin>3.0.0-M1</version.maven-surefire-plugin>
         <version.maven-failsafe-plugin>3.0.0-M1</version.maven-failsafe-plugin>
-        <version.liberty-maven-plugin>3.5</version.liberty-maven-plugin>
+        <version.liberty-maven-plugin>3.5.1</version.liberty-maven-plugin>
         <liberty.bootstrap.project.name>${project.artifactId}</liberty.bootstrap.project.name>
     </properties>
 
@@ -74,8 +74,8 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.31</version>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.32</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

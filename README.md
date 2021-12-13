@@ -17,6 +17,6 @@
 # devfile-stack-starters
 Starters for the java-openliberty devfile-stack.
 
-See: https://github.com/OpenLiberty/devfile-stack/blob/master/README.md for getting started info
+See: https://github.com/OpenLiberty/devfile-stack/blob/main/README.md for getting started info
 
 
