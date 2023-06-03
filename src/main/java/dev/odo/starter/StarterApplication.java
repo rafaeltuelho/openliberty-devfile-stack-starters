@@ -16,10 +16,10 @@ limitations under the License.
 
 package dev.odo.starter;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import jakarta.ws.rs.core.Application;
+import jakarta.ws.rs.ApplicationPath;
 
-@ApplicationPath("/api")
+@ApplicationPath("api")
 public class StarterApplication extends Application {
 
 }
