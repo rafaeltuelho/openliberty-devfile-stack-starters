@@ -10,8 +10,8 @@
             "type": "java",
             "request": "attach",
             "hostName": "127.0.0.1",
-            "name": "Debug Quarkus application",
-            "port": 5005
+            "name": "Debug application",
+            "port": 7777
         }
     ]
 }
