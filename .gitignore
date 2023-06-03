@@ -19,4 +19,5 @@
 .odo\env
 .odo\odo-file-index.json
 
-
+build/
+.gradle/
