@@ -47,9 +47,9 @@ variables:
 components:
   - name: tools
     container:
-      image: quay.io/redhat_na_ssa/universal-developer-image:ubi8-latest # our fork - 2.0GB compressed
+      # image: quay.io/redhat_na_ssa/universal-developer-image:ubi8-latest # our fork - 2.0GB compressed
       # image: quay.io/devfile/universal-developer-image@sha256:80fdd1ae37d3b9e0260d9c66b4ff12e35317c31243eabeea5212d98c537a3ba9 # upstream - 3.7GB compressed
-      # image: registry.redhat.io/devspaces/udi-rhel8:latest #1.7GB compressed
+      image: registry.redhat.io/devspaces/udi-rhel8:latest #1.7GB compressed
       env:
         - name: DEBUG_PORT
           value: '5858'
@@ -98,35 +98,35 @@ commands:
       component: dev
       commandLine: echo "run command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false -DhotTests=true -DcompileWait=3 io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
       workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
-      group:
-        kind: run
-        isDefault: true
+      # hotReloadCapable: true
+      # group:
+      #   kind: run
+      #   isDefault: true
   - id: run-test-off
     exec:
       component: dev
       commandLine: echo "run-test-off command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
       workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
-      group:
-        kind: run
-        isDefault: false
+      # hotReloadCapable: true
+      # group:
+      #   kind: run
+      #   isDefault: false
   - id: debug
     exec:
       component: dev
       commandLine: echo "debug command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -DdebugPort=${DEBUG_PORT} io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev -Dliberty.env.WLP_DEBUG_REMOTE=y
       workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
-      group:
-        kind: debug
-        isDefault: true
+      # hotReloadCapable: true
+      # group:
+      #   kind: debug
+      #   isDefault: true
   - id: test
     # The 'test' command requires an already active container. Multi-module apps require compilation prior to test processing.
     exec:
       component: dev
       commandLine: echo "test command "; {{mvn-cmd}} compiler:compile failsafe:integration-test failsafe:verify
       workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
-      group:
-        kind: test
-        isDefault: true
+      # hotReloadCapable: true
+      # group:
+      #   kind: test
+      #   isDefault: true

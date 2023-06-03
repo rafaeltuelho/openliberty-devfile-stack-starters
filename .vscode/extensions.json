@@ -1,8 +1,9 @@
 {
     "recommendations": [
       // "redhat.vscode-quarkus",
+      "redhat.vscode-microprofile",
       "redhat.vscode-openshift-connector",
-      "Open-Liberty.liberty-dev-vscode-ext",
+      // "Open-Liberty.liberty-dev-vscode-ext",
       // "redhat.fabric8-analytics",
       "redhat.vscode-xml",
       // "vscjava.vscode-java-debug",
