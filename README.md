@@ -30,3 +30,6 @@ Openliberty Gradle quickstart: https://openliberty.io/guides/gradle-intro.html#a
 Openliberty Gradle plugin docs.
  * https://github.com/OpenLiberty/ci.gradle
  * https://www.ibm.com/docs/en/wasdtfe?topic=projects-developing-liberty-gradle-plug-in
+
+Openliberty Devfile-stack public repo
+ * https://github.com/OpenLiberty/devfile-stack/
