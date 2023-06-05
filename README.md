@@ -19,4 +19,14 @@ Starters for the java-openliberty devfile-stack.
 
 See: https://github.com/OpenLiberty/devfile-stack/blob/main/README.md for getting started info
 
+---
 
+# Reference Notes
+
+## Gradle
+
+Openliberty Gradle quickstart: https://openliberty.io/guides/gradle-intro.html#a-few-more-pieces
+
+Openliberty Gradle plugin docs.
+ * https://github.com/OpenLiberty/ci.gradle
+ * https://www.ibm.com/docs/en/wasdtfe?topic=projects-developing-liberty-gradle-plug-in
