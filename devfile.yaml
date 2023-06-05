@@ -41,7 +41,7 @@ starterProjects:
         origin: 'https://github.com/rafaeltuelho/openliberty-devfile-stack-starters.git'
 variables:
   # Liberty runtime version. Minimum recommended: 21.0.0.9
-  liberty-version: '23.0.0.5'
+  liberty-version: '21.0.0.12'
   liberty-plugin-version: '3.7.1'
   mvn-cmd: 'mvn'
 components:
