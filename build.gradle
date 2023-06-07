@@ -17,6 +17,12 @@
 /* 
  * io.openliberty.starter.tag = default-0.6.0 
  */
+// plugins {
+//     id 'war'
+//     id 'io.openliberty.tools.gradle.Liberty' version '3.6'
+// }
+
+// version '1.0-SNAPSHOT'
 group = 'dev.odo.starter.java-openliberty'
 
 repositories {

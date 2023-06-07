@@ -21,10 +21,38 @@ See: https://github.com/OpenLiberty/devfile-stack/blob/main/README.md for gettin
 
 ---
 
+# Building the app Container Image (OCI)
+
+## using [**Cloud Native Buildpacks**](https://buildpacks.io/)
+
+to build using [**pack CLI**](https://buildpacks.io/docs/tools/pack/) 
+
+> make sure you have `pack` CLI installed! If not install it before.
+
+```shell
+pack build \
+--env BP_JAVA_APP_SERVER=liberty \
+--env BP_LIBERTY_PROFILE=microProfile6 \
+--env BP_GRADLE_BUILT_ARTIFACT="build/libs/*.[ejw]ar src/main/liberty/config/*" \
+--buildpack paketo-buildpacks/eclipse-openj9 \
+--buildpack paketo-buildpacks/java openliberty-starter-app
+```
+
+to run the app using the built container image with docker:
+
+```shell
+docker run --name openliberty-starter-default --rm \
+-p 9080:9080 \
+-e WLP_LOGGING_MESSAGE_FORMAT=basic \
+-e WLP_LOGGING_CONSOLE_FORMAT=basic \
+openliberty-starter-app
+```
+
 # Reference Notes
 
 ## Gradle
 
+Openliberty starter: https://openliberty.io/start
 Openliberty Gradle quickstart: https://openliberty.io/guides/gradle-intro.html#a-few-more-pieces
 
 Openliberty Gradle plugin docs.
@@ -33,3 +61,7 @@ Openliberty Gradle plugin docs.
 
 Openliberty Devfile-stack public repo
  * https://github.com/OpenLiberty/devfile-stack/
+
+## Container Image build with Buildpacks
+
+ * https://openliberty.io/blog/2022/04/01/cloud-native-liberty-buildpack.html
