@@ -14,12 +14,40 @@
 
 [![License](https://img.shields.io/badge/License-ASL%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
-# devfile-stack-starters
-Starters for the java-openliberty devfile-stack.
+# Open Liberty starter App sample
+This repo contains a Open Liberty sample starter App with support for building and deploying as Container on Kubernetes or Openshift environment.
 
 See: https://github.com/OpenLiberty/devfile-stack/blob/main/README.md for getting started info
 
 ---
+
+# Inner Loop using Gradle
+
+to start the app in dev mode:
+
+```shell
+./gradlew libertyDev
+```
+
+> **NOTE:** in dev mode you can attach the Java debugger to the default debug port `7777`
+
+to test the app:
+
+```shell
+./gradlew test
+```
+
+to generate a `WAR` file
+
+```shell
+./gradlew war
+```
+
+to see available gradle tasks
+
+```shell
+./gradlew tasks
+```
 
 # Building the app Container Image (OCI)
 
@@ -46,6 +74,12 @@ docker run --name openliberty-starter-default --rm \
 -e WLP_LOGGING_MESSAGE_FORMAT=basic \
 -e WLP_LOGGING_CONSOLE_FORMAT=basic \
 openliberty-starter-app
+```
+
+to test the app do:
+
+```shell
+curl -w localhost:9080/api/hello/OpenLiberty
 ```
 
 # Reference Notes
