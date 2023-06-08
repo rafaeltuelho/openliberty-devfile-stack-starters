@@ -70,7 +70,8 @@ steps:
     envVariables: |
       BP_JAVA_APP_SERVER=liberty
       BP_LIBERTY_PROFILE=microProfile6
-      BP_GRADLE_BUILT_ARTIFACT="build/libs/*.[ejw]ar src/main/liberty/config/*"
+      BP_GRADLE_BUILT_ARTIFACT="build/libs/*.war src/main/liberty/config/*"
+      BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS="--debug --full-stacktrace"
     pullPolicy: 'if-not-present'
 
 - task: Docker@2
@@ -82,21 +83,3 @@ steps:
     tags: |
       $(Build.BuildId)
       latest
-
-# stages:
-# - stage: PushImageTEST
-#   displayName: Push Image to TEST Cluster
-#   jobs:
-#   - job: PushImage
-#     displayName: Push Image Job
-#     container: registry.access.redhat.com/ubi8/skopeo:8.4-15
-#     steps:
-#     - checkout: none
-#     - task: oc-setup@2
-#       inputs:
-#         connectionType: 'OpenShift Connection Service'
-#         openshiftService: 'PDS'
-#     - script: |
-#         skopeo copy --src-creds $(oc whoami):$(oc whoami -t) --dest-creds $(oc whoami):$(oc whoami -t) \
-# docker://default-route-openshift-image-registry.apps.cluster-${{ parameters.labId }}.${{ parameters.labId }}.${{ parameters.sandbox }}.opentlc.com/$(dev_ns)/$(app_name):latest \
-# docker://default-route-openshift-image-registry.apps.cluster-${{ parameters.labId }}.${{ parameters.labId }}.${{ parameters.sandbox }}.opentlc.com/$(test_ns)/$(app_name):$(test_tag)
