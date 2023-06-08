@@ -82,5 +82,4 @@ steps:
     repository: '$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
     command: 'push'
     tags: |
-      $(Build.BuildId)
       latest
