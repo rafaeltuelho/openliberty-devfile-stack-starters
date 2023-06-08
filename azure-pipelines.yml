@@ -62,7 +62,7 @@ steps:
   inputs:
     command: 'build'
     builder: 'gcr.io/paketo-buildpacks/builder:base'
-    imageName: $(PRODUCED_CONTAINER_IMAGE_NAME)
+    imageName: 'quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
     buildpacks: |
       paketo-buildpacks/eclipse-openj9
       paketo-buildpacks/java
@@ -70,16 +70,16 @@ steps:
     envVariables: |
       BP_JAVA_APP_SERVER=liberty
       BP_LIBERTY_PROFILE=microProfile6
-      BP_GRADLE_BUILT_ARTIFACT=build/libs/*.war src/main/liberty/config/*
       BP_GRADLE_BUILD_ARGUMENTS=--no-daemon war
-      BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS=--stacktrace
+      BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS=--full-stacktrace
+      BP_GRADLE_BUILT_ARTIFACT=build/libs/*.war src/main/liberty/config/*
     pullPolicy: 'if-not-present'
 
 - task: Docker@2
   displayName: Push image to Registry
   inputs:
     containerRegistry: 'Quay.io'
-    repository: '$(REGISTRY_REPO)'
+    repository: '$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
     command: 'push'
     tags: |
       $(Build.BuildId)
