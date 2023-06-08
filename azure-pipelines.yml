@@ -44,7 +44,7 @@ steps:
 - task: Docker@2
   inputs:
     containerRegistry: 'Quay.io'
-    command: 'docker login'
+    command: 'login'
 
 - task: BuildpacksTask@1
   inputs:
