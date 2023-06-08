@@ -51,6 +51,13 @@ to see available gradle tasks
 
 # Building the app Container Image (OCI)
 
+## using Docker or Podman CLI
+
+```shell
+#podman
+docker build -f src/main/docker/Dockerfile.gradle -t openliberty-starter-app-test .
+```
+
 ## using [**Cloud Native Buildpacks**](https://buildpacks.io/)
 
 to build using [**pack CLI**](https://buildpacks.io/docs/tools/pack/) 
@@ -81,6 +88,14 @@ to test the app do:
 ```shell
 curl -w localhost:9080/api/hello/OpenLiberty
 ```
+
+to test the health endpoint
+```shell
+curl -w localhost:9080/health
+```
+
+to access the OpenAPI (former Swagger) UI: http://localhost:9080/openapi/ui
+
 
 # Reference Notes
 

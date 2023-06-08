@@ -1,0 +1,24 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: openlibert-starter-app
+  labels:
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: openlibert-starter-app
+    app.kubernetes.io/managed-by: open-liberty-operator
+    app.kubernetes.io/name: openlibert-starter-app
+    app.kubernetes.io/part-of: openlibert-starter-app
+    app.kubernetes.io/version: 1.0.0
+    apps.openliberty.io/name: openlibert-starter-app
+spec:
+  path: /
+  to:
+    kind: Service
+    name: openlibert-starter-app
+    weight: 100
+  port:
+    targetPort: 9443-tcp
+  tls:
+    termination: reencrypt
+  wildcardPolicy: None
+

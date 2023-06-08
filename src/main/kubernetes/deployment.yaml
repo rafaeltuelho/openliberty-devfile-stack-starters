@@ -1,0 +1,116 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: openlibert-starter-app
+  labels:
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: openlibert-starter-app
+    app.kubernetes.io/managed-by: open-liberty-operator
+    app.kubernetes.io/name: openlibert-starter-app
+    app.kubernetes.io/part-of: openlibert-starter-app
+    app.kubernetes.io/version: 1.0.0
+    apps.openliberty.io/name: openlibert-starter-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: openlibert-starter-app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/instance: openlibert-starter-app
+        app.kubernetes.io/managed-by: open-liberty-operator
+        app.kubernetes.io/name: openlibert-starter-app
+        app.kubernetes.io/part-of: openlibert-starter-app
+        app.kubernetes.io/version: 1.0.0
+        apps.openliberty.io/name: openlibert-starter-app
+      annotations:
+        libertyOperator: Open Liberty
+    spec:
+      restartPolicy: Always
+      serviceAccountName: openlibert-starter-app
+      schedulerName: default-scheduler
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 50
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: openlibert-starter-app
+                topologyKey: kubernetes.io/hostname
+      terminationGracePeriodSeconds: 30
+      securityContext: {}
+      containers:
+        - resources: {}
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 9080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 12
+          terminationMessagePath: /dev/termination-log
+          name: app
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 9080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 12
+          env:
+            # - name: TLS_DIR
+            #   value: /etc/x509/certs
+            - name: SA_RESOURCE_VERSION
+              value: '949987'
+            - name: WLP_LOGGING_CONSOLE_LOGLEVEL
+              value: info
+            - name: WLP_LOGGING_CONSOLE_SOURCE
+              value: 'message,accessLog,ffdc,audit'
+            - name: WLP_LOGGING_CONSOLE_FORMAT
+              value: json
+            - name: SEC_IMPORT_K8S_CERTS
+              value: 'true'
+            # - name: SERVICE_CERT_SECRET_RESOURCE_VERSION
+            #   value: '949991'
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            runAsNonRoot: true
+            readOnlyRootFilesystem: false
+            allowPrivilegeEscalation: false
+          ports:
+            - name: 9443-tcp
+              containerPort: 9443
+              protocol: TCP
+          imagePullPolicy: Always
+          # volumeMounts:
+          #   - name: svc-certificate
+          #     readOnly: true
+          #     mountPath: /etc/x509/certs
+          terminationMessagePolicy: File
+          image: 'quay.io/rafaeltuelho/openliberty-starter-app-test:latest'
+      serviceAccount: openlibert-starter-app
+      # volumes:
+      #   - name: svc-certificate
+      #     secret:
+      #       secretName: openlibert-starter-app-svc-tls-ocp
+      #       defaultMode: 420
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

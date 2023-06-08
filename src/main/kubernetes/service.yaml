@@ -1,0 +1,27 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: openlibert-starter-app
+  namespace: openliberty-sandbox
+  labels:
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: openlibert-starter-app
+    app.kubernetes.io/managed-by: open-liberty-operator
+    app.kubernetes.io/name: openlibert-starter-app
+    app.kubernetes.io/part-of: openlibert-starter-app
+    app.kubernetes.io/version: 1.0.0
+    apps.openliberty.io/name: openlibert-starter-app
+spec:
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 9443-tcp
+      protocol: TCP
+      port: 9443
+      targetPort: 9443
+  internalTrafficPolicy: Cluster
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    app.kubernetes.io/instance: openlibert-starter-app

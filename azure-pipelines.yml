@@ -2,6 +2,25 @@
 # Build your Java project and run tests with Gradle using a Gradle wrapper script.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
+name: test
+variables:
+  pub_path: '/home/vsts/work/1/s/app/bin/Release/net5.0/publish'
+  dev_ns: 'demo-dev'
+  test_ns: 'demo-test'
+  prod_ns: 'demo-prod'
+  app_name: 'dotnet-demo'
+  dev_tag: $[format('dev-{0:yyyyMMddHHmmss}', pipeline.startTime)]
+  test_tag: $[format('test-{0:yyyyMMddHHmmss}', pipeline.startTime)]
+  prod_tag: $[format('prod-{0:yyyyMMddHHmmss}', pipeline.startTime)]
+
+parameters:
+  - name: buildConfig
+    displayName: Build Configuration
+    type: string
+    default: Release
+    values:
+    - Release
+    - Debug
 
 trigger:
 - master
@@ -20,4 +39,49 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
-    tasks: 'build'
+    tasks: 'war'
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Quay.io'
+    command: 'docker login'
+
+- task: BuildpacksTask@1
+  inputs:
+    command: 'build'
+    imageName: $(PRODUCED_CONTAINER_IMAGE_NAME)
+    buildpacks: |
+      paketo-buildpacks/eclipse-openj9
+      paketo-buildpacks/java
+    envVariables: |
+      BP_JAVA_APP_SERVER=liberty
+      BP_LIBERTY_PROFILE=microProfile6
+      BP_GRADLE_BUILT_ARTIFACT="build/libs/*.[ejw]ar src/main/liberty/config/*"
+    pullPolicy: 'if-not-present'
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Quay.io'
+    repository: '$(REGISTRY_REPO)'
+    command: 'push'
+    tags: |
+      $(Build.BuildId)
+      latest
+
+# stages:
+# - stage: PushImageTEST
+#   displayName: Push Image to TEST Cluster
+#   jobs:
+#   - job: PushImage
+#     displayName: Push Image Job
+#     container: registry.access.redhat.com/ubi8/skopeo:8.4-15
+#     steps:
+#     - checkout: none
+#     - task: oc-setup@2
+#       inputs:
+#         connectionType: 'OpenShift Connection Service'
+#         openshiftService: 'PDS'
+#     - script: |
+#         skopeo copy --src-creds $(oc whoami):$(oc whoami -t) --dest-creds $(oc whoami):$(oc whoami -t) \
+# docker://default-route-openshift-image-registry.apps.cluster-${{ parameters.labId }}.${{ parameters.labId }}.${{ parameters.sandbox }}.opentlc.com/$(dev_ns)/$(app_name):latest \
+# docker://default-route-openshift-image-registry.apps.cluster-${{ parameters.labId }}.${{ parameters.labId }}.${{ parameters.sandbox }}.opentlc.com/$(test_ns)/$(app_name):$(test_tag)
