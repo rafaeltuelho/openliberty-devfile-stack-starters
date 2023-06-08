@@ -62,8 +62,8 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      pack version
-      /opt/hostedtoolcache/pack/0.29.0/x64/pack build \
+      echo "using pack version $(pack version)"
+      pack build \
       $(PRODUCED_CONTAINER_IMAGE_NAME) \
       --builder gcr.io/paketo-buildpacks/builder:base \
       --buildpack paketo-buildpacks/eclipse-openj9 \
@@ -72,9 +72,9 @@ steps:
       --env BP_LIBERTY_PROFILE=microProfile6 \
       --env BP_GRADLE_BUILD_ARGUMENTS=--no-daemon war \
       --env BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS=--full-stacktrace \
-      --env BP_GRADLE_BUILT_ARTIFACT=build/libs/*.war src/main/liberty/config/* \
-      --tag quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):latest
-      --tag quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.SourceVersion)
+      --env BP_GRADLE_BUILT_ARTIFACT="build/libs/*.war src/main/liberty/config/*" \
+      --tag quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):latest \
+      --tag quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.SourceVersion) \
       --pull-policy if-not-present
 
 
