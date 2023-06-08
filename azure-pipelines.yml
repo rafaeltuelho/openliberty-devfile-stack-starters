@@ -71,7 +71,7 @@ steps:
       BP_JAVA_APP_SERVER=liberty
       BP_LIBERTY_PROFILE=microProfile6
       BP_GRADLE_BUILT_ARTIFACT="build/libs/*.war src/main/liberty/config/*"
-      BP_GRADLE_BUILD_ARGUMENTS="--no-daemon --debug war"
+      BP_GRADLE_BUILD_ARGUMENTS="--no-daemon war"
       BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS="--stacktrace"
     pullPolicy: 'if-not-present'
 
