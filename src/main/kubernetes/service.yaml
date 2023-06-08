@@ -1,16 +1,16 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: openlibert-starter-app
+  name: openliberty-starter-app
   namespace: openliberty-sandbox
   labels:
     app.kubernetes.io/component: backend
-    app.kubernetes.io/instance: openlibert-starter-app
+    app.kubernetes.io/instance: openliberty-starter-app
     app.kubernetes.io/managed-by: open-liberty-operator
-    app.kubernetes.io/name: openlibert-starter-app
-    app.kubernetes.io/part-of: openlibert-starter-app
+    app.kubernetes.io/name: openliberty-starter-app
+    app.kubernetes.io/part-of: openliberty-starter-app
     app.kubernetes.io/version: 1.0.0
-    apps.openliberty.io/name: openlibert-starter-app
+    apps.openliberty.io/name: openliberty-starter-app
 spec:
   ipFamilies:
     - IPv4
@@ -24,4 +24,4 @@ spec:
   ipFamilyPolicy: SingleStack
   sessionAffinity: None
   selector:
-    app.kubernetes.io/instance: openlibert-starter-app
+    app.kubernetes.io/instance: openliberty-starter-app

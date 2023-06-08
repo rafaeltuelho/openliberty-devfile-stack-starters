@@ -1,7 +1,7 @@
 apiVersion: apps.openliberty.io/v1beta2
 kind: OpenLibertyApplication
 metadata:
-  name: openlibert-starter-app
+  name: openliberty-starter-app
 spec:
   applicationVersion: 1.0.0
   applicationImage: 'quay.io/rafaeltuelho/openliberty-starter-app-test:latest'
