@@ -2,13 +2,8 @@
 # Build your Java project and run tests with Gradle using a Gradle wrapper script.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
-name: test
+name: 'CI: Build and Push'
 variables:
-  pub_path: '/home/vsts/work/1/s/app/bin/Release/net5.0/publish'
-  dev_ns: 'demo-dev'
-  test_ns: 'demo-test'
-  prod_ns: 'demo-prod'
-  app_name: 'dotnet-demo'
   dev_tag: $[format('dev-{0:yyyyMMddHHmmss}', pipeline.startTime)]
   test_tag: $[format('test-{0:yyyyMMddHHmmss}', pipeline.startTime)]
   prod_tag: $[format('prod-{0:yyyyMMddHHmmss}', pipeline.startTime)]
@@ -48,7 +43,8 @@ steps:
     targetType: 'inline'
     script: |
       pwd
-      ls -la
+      ls -la build/libs/
+      ls -la src/main/liberty/config/
 
 - task: Docker@2
   displayName: Login into quay.io
@@ -70,6 +66,7 @@ steps:
     buildpacks: |
       paketo-buildpacks/eclipse-openj9
       paketo-buildpacks/java
+    projectPath: './'
     envVariables: |
       BP_JAVA_APP_SERVER=liberty
       BP_LIBERTY_PROFILE=microProfile6
