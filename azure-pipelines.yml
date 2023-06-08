@@ -30,6 +30,7 @@ pool:
 
 steps:
 - task: Gradle@2
+  displayName: Compile and build WAR file
   inputs:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
@@ -41,16 +42,27 @@ steps:
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'war'
 
+- task: Bash@3
+  displayName: Debug
+  inputs:
+    targetType: 'inline'
+    script: |
+      pwd
+      ls -la
+
 - task: Docker@2
+  displayName: Login into quay.io
   inputs:
     containerRegistry: 'Quay.io'
     command: 'login'
 
 - task: BuildpacksInstaller@1
+  displayName: Install Buildpacks CLI
   inputs:
     buildpacksVersion: '0.29.0'
 
 - task: BuildpacksTask@1
+  displayName: Build the OCI with Buildpacks
   inputs:
     command: 'build'
     builder: 'gcr.io/paketo-buildpacks/builder:base'
@@ -65,6 +77,7 @@ steps:
     pullPolicy: 'if-not-present'
 
 - task: Docker@2
+  displayName: Push image to Registry
   inputs:
     containerRegistry: 'Quay.io'
     repository: '$(REGISTRY_REPO)'
