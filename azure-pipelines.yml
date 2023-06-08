@@ -70,11 +70,11 @@ steps:
       --buildpack paketo-buildpacks/java \
       --env BP_JAVA_APP_SERVER=liberty \
       --env BP_LIBERTY_PROFILE=microProfile6 \
-      --env BP_GRADLE_BUILD_ARGUMENTS=--no-daemon war \
-      --env BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS=--full-stacktrace \
+      --env BP_GRADLE_BUILD_ARGUMENTS="--no-daemon war" \
+      --env BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS="--full-stacktrace" \
       --env BP_GRADLE_BUILT_ARTIFACT="build/libs/*.war src/main/liberty/config/*" \
-      --tag quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):latest \
-      --tag quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.SourceVersion) \
+      --tag "quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):latest" \
+      --tag "quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.SourceVersion)" \
       --pull-policy if-not-present
 
 # - task: BuildpacksTask@1
