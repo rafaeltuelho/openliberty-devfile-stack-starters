@@ -29,13 +29,24 @@ steps:
   inputs:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
+    gradleOptions: '-Xmx1024m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    tasks: 'war'
+
+- task: Gradle@2
+  displayName: Run tests
+  inputs:
+    workingDirectory: ''
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx1024m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
-    tasks: 'war'
+    tasks: 'test'
 
 # - task: Bash@3
 #   displayName: Debug
@@ -74,7 +85,7 @@ steps:
       --env BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS="--full-stacktrace" \
       --env BP_GRADLE_BUILT_ARTIFACT="build/libs/*.war src/main/liberty/config/*" \
       --tag "quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):latest" \
-      --tag "quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.SourceVersion)" \
+      --tag "quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.BuildId)-$(Build.SourceVersion)" \
       --pull-policy if-not-present
 
 # - task: BuildpacksTask@1
@@ -102,5 +113,5 @@ steps:
     repository: '$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
     command: 'push'
     tags: |
-      $(Build.SourceVersion)
+      $(Build.BuildId)-$(Build.SourceVersion)
       latest
