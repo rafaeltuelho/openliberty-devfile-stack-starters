@@ -1,5 +1,6 @@
 # Start with OL runtime.
-FROM icr.io/appcafe/open-liberty:full-java11-openj9-ubi
+FROM openliberty/open-liberty:full-java11-openj9-ubi
+# FROM openliberty/open-liberty:microProfile3-ubi-min
 
 ARG VERSION=1.0
 ARG REVISION=SNAPSHOT
@@ -20,5 +21,7 @@ LABEL \
 USER root
 
 COPY --chown=1001:0 src/main/liberty/config/server.xml /config/
-COPY --chown=1001:0 build/libs/*.war /config/apps/
+# COPY --chown=1001:0 build/libs/*.war /config/apps/
+COPY --chown=1001:0 build/libs/*.war /config/dropins
+
 USER 1001

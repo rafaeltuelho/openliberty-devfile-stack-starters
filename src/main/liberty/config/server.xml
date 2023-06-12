@@ -21,9 +21,12 @@
         <feature>mpConfig-3.0</feature>
         <feature>restfulWS-3.1</feature>
         <feature>jsonb-3.0</feature>
-        <!-- <feature>adminCenter-1.0</feature>
-        <feature>restConnector-2.0</feature> -->
+        <!-- <feature>adminCenter-1.0</feature> -->
+        <feature>restConnector-2.0</feature>
         <feature>mpOpenApi-3.1</feature>
+        <!--Enable the following features to run tests with Arquillian managed container-->
+        <!-- <feature>localConnector-1.0</feature>
+        <feature>servlet-6.0</feature> -->
     </featureManager>
     <basicRegistry id="basic">
        <user name="admin" password="adminpwd" />
