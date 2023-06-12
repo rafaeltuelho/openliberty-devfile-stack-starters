@@ -13,18 +13,12 @@ targetCompatibility = 11
 compileJava.options.encoding = 'UTF-8'
 
 dependencies {
+    
     providedCompile 'org.eclipse.microprofile:microprofile:6.0'   
     providedCompile 'jakarta.platform:jakarta.jakartaee-api:10.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
-    // testImplementation 'io.openliberty.arquillian:arquillian-liberty-managed-jakarta-junit:2.1.3'
-    // testImplementation 'org.jboss.shrinkwrap:shrinkwrap-api:1.2.6'
-    testImplementation 'org.testcontainers:testcontainers:1.18.3'
-    testImplementation 'org.microshed:microshed-testing-liberty:0.9.1'
-    testImplementation 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     testImplementation 'org.jboss.resteasy:resteasy-client:6.2.4.Final'
     testImplementation 'org.jboss.resteasy:resteasy-json-binding-provider:6.2.4.Final'
-    testImplementation 'org.eclipse:yasson:3.0.3'
-    // testImplementation 'io.rest-assured:rest-assured:5.2.1'
     testImplementation 'org.slf4j:slf4j-jdk14:2.0.7'
 }
 
@@ -59,8 +53,12 @@ test {
             exceptionFormat = 'full'
             events 'PASSED', 'FAILED', 'SKIPPED'
     }
+    doLast {
+        println 'tests are done!'
+        libertyStop.stop()
+        libertyStatus.status()
+    }
 }
 
-// test.dependsOn 'libertyStart'
-test.dependsOn 'war'
+test.dependsOn 'libertyStart'
 clean.dependsOn 'libertyStop'
