@@ -44,6 +44,7 @@ variables:
   liberty-version: '21.0.0.12'
   liberty-plugin-version: '3.7.1'
   mvn-cmd: 'mvn'
+  gradle-cmd: './gradlew'
 components:
   - name: tools
     container:
@@ -83,9 +84,10 @@ components:
 commands:
   - id: run
     exec:
-      label: '1: run'
+      label: '1: start Liberty in Dev mode'
       component: dev
-      commandLine: echo "run command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false -DhotTests=true -DcompileWait=3 io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
+      # commandLine: echo "run command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false -DhotTests=true -DcompileWait=3 io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
+      commandLine: echo "run command "; {{gradle-cmd}} libertyDev
       workingDir: ${PROJECT_SOURCE}
       hotReloadCapable: true
       group:
@@ -93,32 +95,12 @@ commands:
         isDefault: true
   - id: run-test-off
     exec:
-      label: '2: run test off'
+      label: '2: Run tests'
       component: dev
-      commandLine: echo "run-test-off command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
+      # commandLine: echo "run-test-off command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
+      commandLine: echo "run-test-off command "; {{gradle-cmd}} test
       workingDir: ${PROJECT_SOURCE}
       hotReloadCapable: true
       group:
         kind: run
         isDefault: false
-  - id: debug
-    exec:
-      label: '3: debug'
-      component: dev
-      commandLine: echo "debug command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -DdebugPort=${DEBUG_PORT} io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev -Dliberty.env.WLP_DEBUG_REMOTE=y
-      workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
-      group:
-        kind: debug
-        isDefault: true
-  - id: test
-    # The 'test' command requires an already active container. Multi-module apps require compilation prior to test processing.
-    exec:
-      label: '4: test'
-      component: dev
-      commandLine: echo "test command "; {{mvn-cmd}} compiler:compile failsafe:integration-test failsafe:verify
-      workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
-      group:
-        kind: test
-        isDefault: true
