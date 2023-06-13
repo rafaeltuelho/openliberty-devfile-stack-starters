@@ -27,69 +27,47 @@ steps:
 - checkout: self
   persistCredentials: 'true'
 
-- task: Bash@3
-  displayName: Update Gitops manifests
+- task: Gradle@2
+  displayName: Compile and build WAR file
   inputs:
-    targetType: 'inline'
-    script: |
-      pwd
-      ls -la .
-      echo "Cloning app manifests from $(GITOPS_REPO)"
-      git clone $(GITOPS_REPO) /tmp/gitops-repo
-      cd /tmp/gitops-repo
-      ls -la .
-      export IMAGE_NAME="quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.BuildId)-$(Build.SourceVersion)"
-      echo "updating OpenlibertyApplication CR patch file to use the image tag [ ${IMAGE_NAME} ]"
-      ./.local/bin/mo ./config/overlays/dev/ol-app-patch.yaml.mo >| ./config/overlays/dev/ol-app-patch.yaml
-      cat ./config/overlays/dev/ol-app-patch.yaml
-      echo "setup local agent git"
-      git config --global user.email "rafaelcba@gmail.com"
-      git config --global user.name "Azure DevOps Pipeline $(Build.BuildId)" 
-      git add .
-      git commit -m "Pipeline $(Build.BuildId): updating image tag"
-      git push https://$(GITHUB_PAT)@github.com/$(GITHUB_USERNAME)/$(GITHUB_REPO_NAME).git
+    workingDirectory: ''
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx1024m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    tasks: 'war'
 
-# - task: Gradle@2
-#   displayName: Compile and build WAR file
-#   inputs:
-#     workingDirectory: ''
-#     gradleWrapperFile: 'gradlew'
-#     gradleOptions: '-Xmx1024m'
-#     javaHomeOption: 'JDKVersion'
-#     jdkVersionOption: '1.11'
-#     jdkArchitectureOption: 'x64'
-#     tasks: 'war'
+- task: Gradle@2
+  displayName: Run tests
+  inputs:
+    workingDirectory: ''
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx1024m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    tasks: 'test'
 
-# - task: Gradle@2
-#   displayName: Run tests
-#   inputs:
-#     workingDirectory: ''
-#     gradleWrapperFile: 'gradlew'
-#     gradleOptions: '-Xmx1024m'
-#     javaHomeOption: 'JDKVersion'
-#     jdkVersionOption: '1.11'
-#     jdkArchitectureOption: 'x64'
-#     publishJUnitResults: true
-#     testResultsFiles: '**/TEST-*.xml'
-#     tasks: 'test'
+- task: Docker@2
+  displayName: Login into quay.io
+  inputs:
+    containerRegistry: 'Quay.io'
+    command: 'login'
 
-# - task: Docker@2
-#   displayName: Login into quay.io
-#   inputs:
-#     containerRegistry: 'Quay.io'
-#     command: 'login'
-
-# - task: Docker@2
-#   displayName: Build container image
-#   inputs:
-#     containerRegistry: 'Quay.io'
-#     repository: '$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
-#     command: 'build'
-#     Dockerfile: 'src/main/docker/Dockerfile'
-#     buildContext: '.'
-#     tags: |
-#       latest
-#       $(Build.BuildId)-$(Build.SourceVersion)
+- task: Docker@2
+  displayName: Build container image
+  inputs:
+    containerRegistry: 'Quay.io'
+    repository: '$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
+    command: 'build'
+    Dockerfile: 'src/main/docker/Dockerfile'
+    buildContext: '.'
+    tags: |
+      latest
+      $(Build.BuildId)-$(Build.SourceVersion)
 
 # - task: BuildpacksInstaller@1
 #   displayName: Install Buildpacks CLI
@@ -135,36 +113,37 @@ steps:
 #       BP_GRADLE_BUILT_ARTIFACT=build/libs/*.war src/main/liberty/config/*
 #     pullPolicy: 'if-not-present'
 
-# - task: Docker@2
-#   displayName: Push image to Registry
-#   inputs:
-#     containerRegistry: 'Quay.io'
-#     repository: '$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
-#     command: 'push'
-#     tags: |
-#       $(Build.BuildId)-$(Build.SourceVersion)
-#       latest
+- task: Docker@2
+  displayName: Push image to Registry
+  inputs:
+    containerRegistry: 'Quay.io'
+    repository: '$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
+    command: 'push'
+    tags: |
+      $(Build.BuildId)-$(Build.SourceVersion)
+      latest
 
-# - task: Bash@3
-#   displayName: Update Gitops manifests
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       pwd
-#       ls -la .
-#       echo "Cloning app manifests from $(GITOPS_REPO)"
-#       git clone $(GITOPS_REPO) /tmp/gitops-repo
-#       cd /tmp/gitops-repo
-#       ls -la .
-#       export IMAGE_NAME="quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.BuildId)-$(Build.SourceVersion)"
-#       echo "updating OpenlibertyApplication CR patch file to use the image tag [ ${IMAGE_NAME} ]"
-#       ./.local/bin/mo ./config/overlays/dev/ol-app-patch.yaml.mo >| ./config/overlays/dev/ol-app-patch.yaml
-#       cat ./config/overlays/dev/ol-app-patch.yaml
-#       echo "setup local agent git"
-#       git config --global user.email "rafaelcba@gmail.com"
-#       git config --global user.name "Azure DevOps Pipeline $(Build.BuildId)" 
-#       git add .
-#       git commit -m "Pipeline $(Build.BuildId): updating image tag"
-#       git push https://$(GITHUB_PAT)@github.com/$(GITHUB_USERNAME)/$(GITHUB_REPO_NAME).git
+- task: Bash@3
+  displayName: Update Gitops manifests
+  inputs:
+    targetType: 'inline'
+    script: |
+      # pwd
+      # ls -la .
+      echo "Cloning app manifests from $(GITOPS_REPO)"
+      git clone $(GITOPS_REPO) /tmp/gitops-repo
+      cd /tmp/gitops-repo
+      # ls -la .
+      export IMAGE_NAME="quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.BuildId)-$(Build.SourceVersion)"
+      export REPLICA_COUNT=1
+      echo "updating 'OpenlibertyApplication' CR patch file (at dev env) to use the image tag [ ${IMAGE_NAME} ]"
+      ./.local/bin/mo ./config/overlays/dev/ol-app-patch.yaml.mo >| ./config/overlays/dev/ol-app-patch.yaml
+      cat ./config/overlays/dev/ol-app-patch.yaml
+      echo "setup local agent git"
+      git config --global user.email "rafaelcba@gmail.com"
+      git config --global user.name "Azure DevOps Pipeline $(Build.BuildId)" 
+      git add .
+      git commit -m "Pipeline $(Build.BuildId): updating image tag for dev environment"
+      git push https://$(GITHUB_PAT)@github.com/$(GITHUB_USERNAME)/$(GITHUB_REPO_NAME).git
 
       
