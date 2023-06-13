@@ -71,8 +71,8 @@ steps:
     Dockerfile: 'src/main/docker/Dockerfile'
     buildContext: '.'
     tags: |
-      quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):latest
-      quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.BuildId)-$(Build.SourceVersion)
+      latest
+      $(Build.BuildId)-$(Build.SourceVersion)
 
 # - task: BuildpacksInstaller@1
 #   displayName: Install Buildpacks CLI
