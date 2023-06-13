@@ -1,0 +1,35 @@
+[_]
+id = "io.buildpacks.openshift-custom-build"
+name = "My custom build"
+version = "1.0.0"
+
+[[io.buildpacks.build.env]]
+name="BP_JAVA_APP_SERVER"
+value="liberty"
+[[io.buildpacks.build.env]]
+name="BP_LIBERTY_PROFILE"
+value="microProfile6"
+[[io.buildpacks.build.env]]
+name="BP_GRADLE_BUILD_ARGUMENTS"
+value="--no-daemon war"
+[[io.buildpacks.build.env]]
+name="BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS"
+value="--full-stacktrace"
+[[io.buildpacks.build.env]]
+name="BP_GRADLE_BUILT_ARTIFACT"
+value="build/libs/*.war src/main/liberty/config/*"
+
+[[io.buildpacks.group]]
+id = "io.buildpacks/java"
+version = "1.0"
+
+[[io.buildpacks.group]]
+id = "io.buildpacks/eclipse-openj9"
+version = "1.0"
+
+[[io.buildpacks.group]]
+id = "me/openshift-fs-fix"
+
+  [io.buildpacks.group.script]
+  api = "0.9"
+  inline = "chgrp -R 0 /layers && chmod -R g=u /layers"

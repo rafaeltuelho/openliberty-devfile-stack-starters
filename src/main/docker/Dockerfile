@@ -1,6 +1,5 @@
 # Start with OL runtime.
 FROM openliberty/open-liberty:full-java11-openj9-ubi
-# FROM openliberty/open-liberty:microProfile3-ubi-min
 
 ARG VERSION=1.0
 ARG REVISION=SNAPSHOT

@@ -24,6 +24,9 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+- checkout: self
+  persistCredentials: 'true'
+
 - task: Gradle@2
   displayName: Compile and build WAR file
   inputs:
@@ -64,6 +67,7 @@ steps:
     command: 'login'
 
 - task: Docker@2
+  displayName: Build container image
   inputs:
     containerRegistry: 'Quay.io'
     repository: '$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
@@ -127,3 +131,26 @@ steps:
     tags: |
       $(Build.BuildId)-$(Build.SourceVersion)
       latest
+
+- task: Bash@3
+  displayName: Debug
+  inputs:
+    targetType: 'inline'
+    script: |
+      pwd
+      echo "Cloning app manifests from $(GITOPS_REPO)"
+      git clone $(GITOPS_REPO) /tmp/gitops-repo
+      cd /tmp/gitops-repo
+      ls -la .
+      export IMAGE_NAME="quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.BuildId)-$(Build.SourceVersion)"
+      echo "updating OpenlibertyApplication CR patch file to use the image tag [ ${IMAGE_NAME} ]"
+      ./.local/bin/mo ./config/overlays/dev/ol-app-patch.yaml.mo >| ./config/overlays/dev/ol-app-patch.yaml
+      cat ./config/overlays/dev/ol-app-patch.yaml
+      echo "setup local agent git"
+      git config --global user.email "rafaelcba@gmail.com"
+      git config --global user.name "Azure DevOps Pipeline $(Build.BuildId)" 
+      git add .
+      git commit -m "Pipeline $(Build.BuildId): updating image tag"
+      git push
+
+      
