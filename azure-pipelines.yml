@@ -63,30 +63,42 @@ steps:
     containerRegistry: 'Quay.io'
     command: 'login'
 
-- task: BuildpacksInstaller@1
-  displayName: Install Buildpacks CLI
+- task: Docker@2
   inputs:
-    buildpacksVersion: '0.29.0'
+    containerRegistry: 'Quay.io'
+    repository: '$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME)'
+    command: 'build'
+    Dockerfile: 'src/main/docker/Dockerfile'
+    buildContext: '.'
+    tags: |
+      quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):latest
+      quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.BuildId)-$(Build.SourceVersion)
 
-- task: Bash@3
-  displayName: Build the OCI with Buildpacks
-  inputs:
-    targetType: 'inline'
-    script: |
-      echo "using pack version $(pack version)"
-      echo "building $(PRODUCED_CONTAINER_IMAGE_NAME) image using Buildpacks CLI"
-      pack build $(PRODUCED_CONTAINER_IMAGE_NAME) \
-      --builder gcr.io/paketo-buildpacks/builder:base \
-      --buildpack paketo-buildpacks/eclipse-openj9 \
-      --buildpack paketo-buildpacks/java \
-      --env BP_JAVA_APP_SERVER=liberty \
-      --env BP_LIBERTY_PROFILE=microProfile6 \
-      --env BP_GRADLE_BUILD_ARGUMENTS="--no-daemon war" \
-      --env BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS="--full-stacktrace" \
-      --env BP_GRADLE_BUILT_ARTIFACT="build/libs/*.war src/main/liberty/config/*" \
-      --tag "quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):latest" \
-      --tag "quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.BuildId)-$(Build.SourceVersion)" \
-      --pull-policy if-not-present
+# - task: BuildpacksInstaller@1
+#   displayName: Install Buildpacks CLI
+#   inputs:
+#     buildpacksVersion: '0.29.0'
+
+# - task: Bash@3
+#   displayName: Build the OCI with Buildpacks
+#   inputs:
+#     targetType: 'inline'
+#     script: |
+#       echo "using pack version $(pack version)"
+#       echo "building $(PRODUCED_CONTAINER_IMAGE_NAME) image using Buildpacks CLI"
+#       pack build $(PRODUCED_CONTAINER_IMAGE_NAME) \
+#       --builder gcr.io/paketo-buildpacks/builder:base \
+#       --buildpack paketo-buildpacks/eclipse-openj9 \
+#       --buildpack paketo-buildpacks/java \
+#       --env BP_JAVA_APP_SERVER=liberty \
+#       --env BP_LIBERTY_INSTALL_TYPE=ol \
+#       --env BP_LIBERTY_PROFILE=microProfile6 \
+#       --env BP_GRADLE_BUILD_ARGUMENTS="--no-daemon war" \
+#       --env BP_GRADLE_ADDITIONAL_BUILD_ARGUMENTS="--full-stacktrace" \
+#       --env BP_GRADLE_BUILT_ARTIFACT="build/libs/*.war src/main/liberty/config/*" \
+#       --tag "quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):latest" \
+#       --tag "quay.io/$(REGISTRY_REPO)/$(PRODUCED_CONTAINER_IMAGE_NAME):$(Build.BuildId)-$(Build.SourceVersion)" \
+#       --pull-policy if-not-present
 
 # - task: BuildpacksTask@1
 #   displayName: Build the OCI with Buildpacks
