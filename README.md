@@ -13,6 +13,7 @@
 <br />
 
 [![License](https://img.shields.io/badge/License-ASL%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Contribute](https://www.eclipse.org/che/contribute.svg)](https://workspaces.openshift.com#https://github.com/rafaeltuelho/openliberty-starter-app.git)
 
 # Open Liberty starter App sample
 This repo contains a Open Liberty sample starter App with support for building and deploying as Container on Kubernetes or Openshift environment.
