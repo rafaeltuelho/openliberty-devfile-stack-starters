@@ -54,7 +54,7 @@ components:
       volumeMounts:
         - name: m2
           path: /home/user/.m2
-      memoryLimit: 4Gi
+      memoryLimit: 6Gi
       memoryRequest: 1Gi
       cpuRequest: '1'
       cpuLimit: '3'
@@ -85,22 +85,22 @@ commands:
   - id: run
     exec:
       label: '1: start Liberty in Dev mode'
-      component: dev
+      component: tools
       # commandLine: echo "run command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false -DhotTests=true -DcompileWait=3 io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
       commandLine: echo "run command "; {{gradle-cmd}} libertyDev
       workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
-      group:
-        kind: run
-        isDefault: true
+      # hotReloadCapable: true
+      # group:
+      #   kind: run
+      #   isDefault: true
   - id: run-test-off
     exec:
       label: '2: Run tests'
-      component: dev
+      component: tools
       # commandLine: echo "run-test-off command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
       commandLine: echo "run-test-off command "; {{gradle-cmd}} test
       workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
-      group:
-        kind: run
-        isDefault: false
+      # hotReloadCapable: true
+      # group:
+      #   kind: run
+      #   isDefault: false
