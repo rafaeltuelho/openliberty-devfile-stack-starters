@@ -1,44 +1,6 @@
-# Copyright (c) 2021,2022 IBM Corporation and others
-#
-# See the NOTICE file(s) distributed with this work for additional
-# information regarding copyright ownership.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# You may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 schemaVersion: 2.1.0
 metadata:
   name: java-websphereliberty
-  # displayName: WebSphere Liberty Maven
-  # description: Java application based Java 11 and Maven 3.8, using the WebSphere Liberty runtime 22.0.0.1
-  # icon: https://raw.githubusercontent.com/WASdev/logos/main/liberty-was-500-purple.svg
-  # tags:
-  #   - Java
-  #   - Maven
-  #   - WebSphere Liberty
-  # architectures:
-  #   - amd64
-  #   - ppc64le
-  #   - s390x
-  # language: Java
-  # projectType: WebSphere Liberty
-  # version: 0.9.0
-  # alpha.build-dockerfile: https://github.com/OpenLiberty/devfile-stack/releases/download/websphere-liberty-maven-0.8.1/Dockerfile
-  # alpha.deployment-manifest: https://github.com/OpenLiberty/devfile-stack/releases/download/websphere-liberty-maven-0.8.1/app-deploy.yaml
-starterProjects:
-  - name: rest
-    git:
-      remotes:
-        origin: 'https://github.com/rafaeltuelho/openliberty-devfile-stack-starters.git'
 variables:
   # Liberty runtime version. Minimum recommended: 21.0.0.9
   liberty-version: '21.0.0.12'
@@ -48,9 +10,12 @@ variables:
 components:
   - name: tools
     container:
-      image: quay.io/redhat_na_ssa/universal-developer-image:ubi8-latest # our fork - 2.0GB compressed
+      # image: quay.io/redhat_na_ssa/universal-developer-image:ubi8-latest # our fork - 2.0GB compressed
       # image: quay.io/devfile/universal-developer-image@sha256:80fdd1ae37d3b9e0260d9c66b4ff12e35317c31243eabeea5212d98c537a3ba9 # upstream - 3.7GB compressed
-      # image: registry.redhat.io/devspaces/udi-rhel8:latest #1.7GB compressed
+      image: registry.redhat.io/devspaces/udi-rhel8:latest #1.7GB compressed
+      env:
+        - name: USE_JAVA17
+          value: 'true'
       volumeMounts:
         - name: m2
           path: /home/user/.m2
@@ -89,10 +54,6 @@ commands:
       # commandLine: echo "run command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false -DhotTests=true -DcompileWait=3 io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
       commandLine: echo "run command "; {{gradle-cmd}} libertyDev
       workingDir: ${PROJECT_SOURCE}
-      # hotReloadCapable: true
-      # group:
-      #   kind: run
-      #   isDefault: true
   - id: run-test-off
     exec:
       label: '2: Run tests'
@@ -100,7 +61,24 @@ commands:
       # commandLine: echo "run-test-off command "; {{mvn-cmd}} -DinstallDirectory=/opt/ibm/wlp -Ddebug=false io.openliberty.tools:liberty-maven-plugin:{{liberty-plugin-version}}:dev
       commandLine: echo "run-test-off command "; {{gradle-cmd}} test
       workingDir: ${PROJECT_SOURCE}
-      # hotReloadCapable: true
-      # group:
-      #   kind: run
-      #   isDefault: false
+  - id: init-setup
+    exec:
+      label: '99: initial setup'
+      component: "tools"
+      workingDir: "${PROJECT_SOURCE}"
+      commandLine: |
+        #if sdkman is present use it
+        [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk default java 17.0.7-tem
+        #copy maven settings pointing to in-cluster nexus mirror
+        [[ -s "$PROJECT_SOURCE/settings.xml" ]] && cp -v $PROJECT_SOURCE/settings.xml $HOME/.m2/
+        #setup git default config
+        git config --local credential.helper store
+        git config --local pull.rebase true
+        git config --local fetch.prune true
+        git config --local diff.colorMoved zebra
+        echo "source /usr/share/bash-completion/completions/git" >> /home/user/.bashrc
+        oc completion bash > /home/user/.oc_bash_completion
+        echo "source /home/user/.oc_bash_completion" >> /home/user/.bashrc
+events:
+  postStart:
+    - init-setup # <== Start of the workspace happens after this command is completed

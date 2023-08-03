@@ -28,6 +28,10 @@ id = "io.buildpacks/eclipse-openj9"
 version = "1.0"
 
 [[io.buildpacks.group]]
+id = "io.buildpacks/liberty"
+version = "1.0"
+
+[[io.buildpacks.group]]
 id = "me/openshift-fs-fix"
 
   [io.buildpacks.group.script]
